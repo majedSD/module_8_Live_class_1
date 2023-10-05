@@ -1,89 +1,137 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-///Now i am creating a stateful widget and how work this stateful widget and given the answer of the widget
-/// Life cycle of stateful widget and how to works this stateful widget
-///  constructor
-///  State
-///  initstate
-///  didUpdatedependences
-///  build
-///  did update widget dependencies
-///  deactivate
-///  dispose
-/******
- * flutter inspector----------------widget tree
- * structure of this flutter project---------
- */
 void main(){
-  runApp(MyApp());
+  runApp( const MyApp());
 }
 class MyApp extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-   return MaterialApp(
-     home: HomeScreen(),
-   );
-  }
-}
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const MyApp({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _HomePageView();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomePage(),
+    );
   }
+
 }
-class _HomePageView extends State<HomeScreen>{
-  var sum=0;
+class HomePage extends StatefulWidget{
   @override
-  void initState() {
-    print('First step of stateful widget:-------------1');
-    ///Screen start howar somoy emon kaj kora lagbe aitar jonno initState
-    super.initState();
+  State<StatefulWidget> createState() {
+    return HomePageView();
   }
-  @override
-  void didUpdateWidget(covariant HomeScreen oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-  }
-  @override
-  void didChangeDependencies() {
-   ///Jokon amar kuno ekta page er dependencey change hoi
-    super.didChangeDependencies();
-  }
+
+}
+class HomePageView extends State<HomePage>{
+  double result=0.0;
+  TextEditingController fild1=TextEditingController();
+  TextEditingController fild2=TextEditingController();
+  GlobalKey <FormState> _formKey=GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    ///Stateless widget er moddhe ekta build method take sudu build korlo and ter kaj sesh.
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+       title:Text("Sum App"),
       ),
-      body:Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('$sum'),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child:Form(
+          key: _formKey,
+    child:Center(
+          child: Column(
+            children: [
+              TextFormField(
+                keyboardType:TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                controller: fild1,
+                decoration:InputDecoration(
+                  label: Text('Enter first value'),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (String?value){
+                  if(value?.isEmpty??true){
+                    return 'Please Enter the valid value';
+                  }
+                  else{
+                    return null;
+                  }
+                }
+              ),
+              SizedBox(height: 10,),
+              TextFormField(
+                keyboardType:TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  controller: fild2,
+                decoration:InputDecoration(
+                  label: Text('Enter first value'),
+                  border: OutlineInputBorder(),
+                ),
+                  validator: (String?value){
+                    if(value?.isEmpty??true){
+                      return 'Please Enter the valid value';
+                    }
+                   return null;
+                  }
+              ),
+              SizedBox(height: 10,),
+              ButtonBar(///Row er moto onek gula button nia kaj kora jai -------onek gula button take ekta rowta
+                alignment: MainAxisAlignment.center,
+                children: [
+                 ElevatedButton.icon(
+                     onPressed: (){
+                       if(_formKey.currentState!.validate()){
+                         setState(() {
+                           double num1=double.parse(fild1.text);
+                           double num2=double.parse(fild2.text);
+                           result=num1+num2;
+                         });
+                       }
+                       else{
+                         print('not working');
+                       }
+                     },
+                     icon:Icon(Icons.add),
+                   label: Text('Add'),
+                 ),
+                  ElevatedButton.icon(
+                    onPressed: (){
+                      if(_formKey.currentState!.validate()){
+                        setState(() {
+                          double num1=double.parse(fild1.text);
+                          double num2=double.parse(fild2.text);
+                          result=num1-num2;
+                        });
+                      }
+                      else{
+                        print('not working');
+                      }
+                    },
+                    icon:Icon(Icons.remove),
+                    label: Text('Sub'),
+                  ),
+                  /*ElevatedButton(
+                    onPressed: (){},
+                    child:Text('Add'),
+                  ),
+                  ElevatedButton(
+                    onPressed: (){},
+                    child:Text('Add'),
+                  ),*/
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text("Result:$result",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          setState(() {
-            sum++;
-          });
-        }, child: Icon(Icons.add)
       ),
     );
   }
-  @override
-  void deactivate() {
-    // TODO: implement deactivate
-    super.deactivate();
-  }
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
+
 }
+///To Do
+///multipli
+///division
+///modulus
